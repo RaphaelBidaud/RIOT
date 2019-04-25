@@ -492,6 +492,23 @@ int8_t at86rf2xx_get_cca_threshold(const at86rf2xx_t *dev);
 void at86rf2xx_set_cca_threshold(const at86rf2xx_t *dev, int8_t value);
 
 /**
+ * @brief   Get the CCA mode
+ *
+ * @param[in] dev           device to read value from
+ *
+ * @return                  the current CCA mode
+ */
+uint8_t at86rf2xx_get_cca_mode(const at86rf2xx_t *dev);
+
+/**
+ * @brief   Set the CCA mode
+ *
+ * @param[in] dev           device to write to
+ * @param[in] value         the new CCA mode
+ */
+void at86rf2xx_set_cca_mode(const at86rf2xx_t *dev, uint8_t mode);
+
+/**
  * @brief   Get the latest ED level measurement
  *
  * @param[in] dev           device to read value from

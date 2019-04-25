@@ -374,6 +374,24 @@ void at86rf2xx_set_cca_threshold(const at86rf2xx_t *dev, int8_t value)
     at86rf2xx_reg_write(dev, AT86RF2XX_REG__CCA_THRES, value);
 }
 
+uint8_t at86rf2xx_get_cca_mode(const at86rf2xx_t *dev)
+{
+    uint8_t tmp = at86rf2xx_reg_read(dev, AT86RF2XX_REG__PHY_CC_CCA);
+    tmp &= AT86RF2XX_PHY_CC_CCA_MASK__CCA_MODE;
+    tmp >>= 5;
+    return tmp;
+}
+
+void at86rf2xx_set_cca_mode(const at86rf2xx_t *dev, uint8_t mode)
+{
+    uint8_t tmp = at86rf2xx_reg_read(dev, AT86RF2XX_REG__PHY_CC_CCA);
+    tmp &= ~(AT86RF2XX_PHY_CC_CCA_MASK__CCA_MODE);
+    mode <<= 5;
+    mode &= AT86RF2XX_PHY_CC_CCA_MASK__CCA_MODE;
+    tmp |= mode;
+    at86rf2xx_reg_write(dev, AT86RF2XX_REG__PHY_CC_CCA, tmp);
+}
+
 int8_t at86rf2xx_get_ed_level(at86rf2xx_t *dev)
 {
     uint8_t tmp = at86rf2xx_reg_read(dev, AT86RF2XX_REG__PHY_ED_LEVEL);

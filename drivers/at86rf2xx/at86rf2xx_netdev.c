@@ -417,6 +417,21 @@ static int _get(netdev_t *netdev, netopt_t opt, void *val, size_t max_len)
             res = sizeof(int8_t);
             break;
 
+        case NETOPT_CCA_MODE:
+            assert(max_len >= sizeof(uint8_t));
+            *((uint8_t *)val) = at86rf2xx_get_cca_mode(dev);
+            switch (*((int8_t *)val)) {
+                case NETDEV_IEEE802154_CCA_MODE_1:
+                case NETDEV_IEEE802154_CCA_MODE_2:
+                case NETDEV_IEEE802154_CCA_MODE_3:
+                    res = sizeof(uint8_t);
+                    break;
+                default:
+                    res = -EOVERFLOW;
+                    break;
+            }
+            break;
+
         case NETOPT_IS_CHANNEL_CLR:
             assert(max_len >= sizeof(netopt_enable_t));
             *((netopt_enable_t *)val) = at86rf2xx_cca(dev);
@@ -608,6 +623,23 @@ static int _set(netdev_t *netdev, netopt_t opt, const void *val, size_t len)
             assert(len <= sizeof(int8_t));
             at86rf2xx_set_cca_threshold(dev, *((const int8_t *)val));
             res = sizeof(int8_t);
+            break;
+
+        case NETOPT_CCA_MODE:
+            assert(len <= sizeof(uint8_t));
+            switch (*((int8_t *)val)) {
+                case NETDEV_IEEE802154_CCA_MODE_1:
+                case NETDEV_IEEE802154_CCA_MODE_2:
+                case NETDEV_IEEE802154_CCA_MODE_3:
+                    at86rf2xx_set_cca_mode(dev, *((const uint8_t *)val));
+                    res = sizeof(uint8_t);
+                    break;
+                case NETDEV_IEEE802154_CCA_MODE_4:
+                case NETDEV_IEEE802154_CCA_MODE_5:
+                case NETDEV_IEEE802154_CCA_MODE_6:
+                default:
+                    break;
+            }
             break;
 
         default:
